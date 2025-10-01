@@ -1,0 +1,50 @@
+services:
+
+  supermanager-backend:
+    image: gsmx64/supermanager-backend:latest
+    container_name: supermanager-backend
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - PRODUCTION=true
+      - ENVIRONMENT=production
+      - PYTHONDONTWRITEBYTECODE 1
+      - PYTHONUNBUFFERED 1
+    networks:
+      - supermanager-network
+    volumes:
+      - .:/app
+
+  supermanager-frontend:
+    image: gsmx64/supermanager-frontend:latest
+    container_name: supermanager-frontend
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    depends_on:
+      - supermanager-backend
+    networks:
+      - supermanager-network
+    volumes:
+      - .:/app
+
+  supermanager-reverse-proxy:
+    image: gsmx64/supermanager-reverse-proxy:latest
+    container_name: supermanager-reverse-proxy
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    depends_on:
+      - supermanager-backend
+      - supermanager-frontend
+    ports:
+      - ${DOCKER_PROD_HTTP_PORT}:80
+      - ${DOCKER_PROD_HTTPS_PORT}:443
+    networks:
+      - supermanager-network
+    volumes:
+      - .:/app
+
+networks:
+  supermanager-network:

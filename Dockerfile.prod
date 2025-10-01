@@ -1,0 +1,95 @@
+FROM python:3.13.7-slim-bullseye AS build-phase
+
+WORKDIR /app-build
+
+ENV PRODUCTION=true
+ENV ENVIRONMENT=production
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Application settings
+ENV APP_NAME="SuperManager"
+
+# Django settings
+ENV DEBUG=False
+ENV SECRET_KEY="your-secret-key"
+ENV TOKEN_SIGNING_KEY="your-signing-key"
+ENV TOKEN_ALGORITHM="HS256"
+ENV TOKEN_LIFETIME_MINUTES=60
+ENV TOKEN_REFRESH_LIFETIME_DAYS=7
+
+# Comma-separated list of hosts - localhost, 127.0.0.1, ::/1 or just * to allow all
+ENV ALLOWED_HOSTS="*"
+
+# Comma-separated list of CIDR nets - 0.0.0.0/0, ::/0 or just * to allow all
+ENV ALLOWED_CIDR_NETS="*"
+
+# Database configuration
+ENV DATABASE_ENGINE="django.db.backends.postgresql"
+ENV DATABASE_NAME="supermanager_db"
+ENV DATABASE_USER="supermanager_user"
+ENV DATABASE_PASSWORD=""
+ENV DATABASE_HOST=""
+ENV DATABASE_PORT=5432
+
+# Media files settings
+ENV MEDIA_URL="/media/"
+ENV MEDIA_ROOT="media"
+
+# Email settings
+ENV MAIL_ENABLED=False
+ENV MAIL_BACKEND="django.core.mail.backends.console.EmailBackend"
+ENV MAIL_HOST="localhost"
+ENV MAIL_PORT=1025
+ENV MAIL_USER=""
+ENV MAIL_PASSWORD=""
+ENV MAIL_USE_TLS=False
+ENV MAIL_USE_SSL=False
+ENV DEFAULT_FROM_EMAIL="webmaster@localhost"
+
+# Frontend URL for password reset links
+ENV FRONTEND_URL="http://localhost:3000"
+
+# Password reset email settings
+ENV MAIL_PWRESET_SUBJECT="[SuperManager] Password Reset"
+ENV MAIL_PWRESET_MESSAGE="Use this link to reset your password: {reset_url}"
+ENV MAIL_PWRESET_URL="{FRONTEND_URL}/auth/reset-password/{uid}/{token}"
+
+# Pagination settings
+ENV PAGINATION_PAGE_SIZE=10
+
+RUN pip install --upgrade pip
+
+COPY requirements.txt ./
+
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app-build/wheels -r requirements.txt
+
+
+FROM python:3.13.7-slim-bullseye
+
+RUN mkdir -p /home/app && addgroup --system app && adduser --system --group app && mkdir /home/app/backend
+
+WORKDIR /home/app/backend
+
+ENV PRODUCTION=true
+ENV ENVIRONMENT=production
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN apt-get update && apt-get install -y --no-install-recommends netcat
+COPY --from=build-phase /app-build/wheels /wheels
+COPY --from=build-phase /app-build/requirements.txt .
+RUN pip install --upgrade pip && pip install --no-cache /wheels/*
+
+COPY . /home/app/backend
+
+RUN chown -R app:app /home/app/backend
+
+RUN mkdir -p /home/app/backend/media && chown -R app:app /home/app/backend/media
+RUN mkdir -p /home/app/backend/media/avatars && chown -R app:app /home/app/backend/media/avatars
+
+USER app
+
+EXPOSE 8000
+
+CMD ["uvicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--worker-class", "uvicorn.workers.UvicornWorker", "supermanager.asgi:api"]

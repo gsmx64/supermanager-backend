@@ -3,7 +3,7 @@ SuperManager - Backend part (Under Development) - v1.0.0
 
 ## Overview
 
-![Super Manager Logo](docs/images/sm_logo.png)
+![Super Manager Logo](docs/images/sm_logo_small.png)
 
 SuperManager is an IT management system designed to streamline and optimize your organization's technology operations.
 

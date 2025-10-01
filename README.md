@@ -3,7 +3,8 @@ SuperManager - Backend part (Under Development) - v1.0.0
 
 ## Overview
 
-![Super Manager Logo](docs/images/logo.png)
+![Super Manager Logo](docs/images/sm_logo.png)
+
 SuperManager is an IT management system designed to streamline and optimize your organization's technology operations.
 
 **Super Manager - Backend** is the core API and service layer for managing all aspects of IT infrastructure. It provides robust tools for device inventory, software deployment, script execution, reporting, supply stock control, calendar management, user administration, and notifications.

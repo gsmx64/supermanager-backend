@@ -1,0 +1,20 @@
+services:
+
+  supermanager-backend:
+    image: gsmx64/supermanager-backend:latest
+    container_name: supermanager-backend
+    restart: unless-stopped
+    environment:
+      - PRODUCTION=true
+      - ENVIRONMENT=production
+      - PYTHONDONTWRITEBYTECODE 1
+      - PYTHONUNBUFFERED 1
+    ports:
+      - "8000:8000"
+    networks:
+      - supermanager-network
+    volumes:
+      - .:/app
+
+networks:
+  supermanager-network:

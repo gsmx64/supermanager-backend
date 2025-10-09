@@ -25,7 +25,7 @@ ENV ENVIRONMENT=production
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
+#RUN apt-get update && apt-get install -y --no-install-recommends netcat
 COPY --from=build-phase /app-build/wheels /wheels
 COPY --from=build-phase /app-build/requirements.txt .
 RUN pip install --upgrade pip && pip install --no-cache /wheels/*

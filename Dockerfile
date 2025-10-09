@@ -1,4 +1,4 @@
-FROM python:3.13.7-slim-bullseye AS build-phase
+FROM python:3.14.0-slim AS build-phase
 
 WORKDIR /app-build
 
@@ -14,7 +14,7 @@ COPY requirements.txt ./
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app-build/wheels -r requirements.txt
 
 
-FROM python:3.13.7-slim-bullseye
+FROM python:3.14.0-slim
 
 RUN mkdir -p /home/app && addgroup --system app && adduser --system --group app && mkdir /home/app/web
 

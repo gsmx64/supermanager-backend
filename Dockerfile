@@ -7,7 +7,7 @@ ENV ENVIRONMENT=production
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apt update && apt-get install pkg-config -y && pip install --upgrade pip
+RUN apt update && apt install pkg-config -y && pip install --upgrade pip
 
 COPY requirements.txt ./
 
@@ -28,8 +28,15 @@ ENV PYTHONUNBUFFERED 1
 COPY --from=build-phase /app-build/wheels /wheels
 COPY --from=build-phase /app-build/requirements.txt .
 RUN chown -R app:app /wheels
-RUN apt-get update && apt-get install -y --no-install-recommends netcat pkg-config
-RUN pip install --upgrade pip && pip install --no-cache /wheels/*
+RUN apt update && \
+	apt install -y --no-install-recommends \
+		build-essential \
+		pkg-config \
+		default-libmysqlclient-dev \
+		libpq-dev \
+		gcc && \
+	pip install --upgrade pip && \
+    pip install --no-cache /wheels/*
 
 COPY . /home/app/web
 

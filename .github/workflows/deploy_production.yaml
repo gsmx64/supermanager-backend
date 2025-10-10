@@ -26,7 +26,9 @@ jobs:
         chmod 600 private_key.pem
         mkdir -p ~/.ssh
         ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
-        scp -i private_key.pem -o StrictHostKeyChecking=no docker-compose-backend.yml $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/docker-compose.yml
+        eval "$(ssh-agent -s)"
+        ssh-add private_key.pem
+        scp -o StrictHostKeyChecking=no docker-compose-backend.yml $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/docker-compose.yml
     - name: Run docker-compose on remote server
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

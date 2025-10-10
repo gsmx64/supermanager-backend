@@ -35,12 +35,12 @@ APP_NAME = os.environ.get('APP_NAME', 'SuperManager') if environment == 'product
 SECRET_KEY = os.environ.get('SECRET_KEY') if environment == 'production' else config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') if environment == 'production' else config('DEBUG', default=False, cast=bool)
+DEBUG = bool(os.environ.get('DEBUG')) if environment == 'production' else config('DEBUG', default=False, cast=bool)
 
 # SECURITY WARNING: define the correct hosts in production!
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=os.environ.get('TOKEN_LIFETIME_MINUTES') if environment == 'production' else config('TOKEN_LIFETIME_MINUTES', default=60, cast=int)),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=os.environ.get('TOKEN_REFRESH_LIFETIME_DAYS') if environment == 'production' else config('TOKEN_REFRESH_LIFETIME_DAYS', default=7, cast=int)),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=int(os.environ.get('TOKEN_LIFETIME_MINUTES')) if environment == 'production' else config('TOKEN_LIFETIME_MINUTES', default=60, cast=int)),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=int(os.environ.get('TOKEN_REFRESH_LIFETIME_DAYS')) if environment == 'production' else config('TOKEN_REFRESH_LIFETIME_DAYS', default=7, cast=int)),
     "TOKEN_OBTAIN_SERIALIZER": "api.serializers.AuthTokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "api.serializers.AuthTokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "api.serializers.AuthTokenVerifySerializer",
@@ -113,7 +113,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': os.environ.get('PAGINATION_PAGE_SIZE') if environment == 'production' else config('PAGINATION_PAGE_SIZE', default=10, cast=int),
+    'PAGE_SIZE': int(os.environ.get('PAGINATION_PAGE_SIZE')) if environment == 'production' else config('PAGINATION_PAGE_SIZE', default=10, cast=int),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_ORDERING_BACKENDS': ['rest_framework.filters.OrderingFilter'],
 }
@@ -207,14 +207,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, media_root_path)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email configuration
-EMAIL_ENABLED = os.environ.get('EMAIL_ENABLED') if environment == 'production' else config('EMAIL_ENABLED', default=False, cast=bool)
+EMAIL_ENABLED = bool(os.environ.get('EMAIL_ENABLED')) if environment == 'production' else config('EMAIL_ENABLED', default=False, cast=bool)
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND') if environment == 'production' else config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend', cast=str)
 EMAIL_HOST = os.environ.get('EMAIL_HOST') if environment == 'production' else config('EMAIL_HOST', default='localhost', cast=str)
-EMAIL_PORT = os.environ.get('EMAIL_PORT') if environment == 'production' else config('EMAIL_PORT', default=1025, cast=int)
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT')) if environment == 'production' else config('EMAIL_PORT', default=1025, cast=int)
 EMAIL_USER = os.environ.get('EMAIL_USER') if environment == 'production' else config('EMAIL_USER', default='', cast=str)
 EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD') if environment == 'production' else  config('EMAIL_PASSWORD', default='', cast=str)
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS') if environment == 'production' else config('EMAIL_USE_TLS', default=False, cast=bool)
-EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL') if environment == 'production' else config('EMAIL_USE_SSL', default=False, cast=bool)
+EMAIL_USE_TLS = bool(os.environ.get('EMAIL_USE_TLS')) if environment == 'production' else config('EMAIL_USE_TLS', default=False, cast=bool)
+EMAIL_USE_SSL = bool(os.environ.get('EMAIL_USE_SSL')) if environment == 'production' else config('EMAIL_USE_SSL', default=False, cast=bool)
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL') if environment == 'production' else config('DEFAULT_FROM_EMAIL', default='webmaster@localhost', cast=str)
 
 # Email settings for password reset

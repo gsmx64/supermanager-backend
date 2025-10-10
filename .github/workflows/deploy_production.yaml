@@ -18,7 +18,7 @@ jobs:
     - name: Copy docker-compose.yml to remote server
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SSH_KEY_PASSPHRASE: ${{ secrets.SSH_KEY_PASSPHRASE }}
+        SSH_PASSPHRASE: ${{ secrets.SSH_KEY_PASSPHRASE }}
         REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
         REMOTE_HOST: ${{ secrets.SSH_REMOTE_HOST }}
         REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}
@@ -33,7 +33,7 @@ jobs:
     - name: Run docker compose on remote server
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SSH_KEY_PASSPHRASE: ${{ secrets.SSH_KEY_PASSPHRASE }}
+        SSH_PASSPHRASE: ${{ secrets.SSH_KEY_PASSPHRASE }}
         REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
         REMOTE_HOST: ${{ secrets.SSH_REMOTE_HOST }}
         REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}

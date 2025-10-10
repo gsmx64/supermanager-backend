@@ -27,7 +27,12 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
         eval "$(ssh-agent -s)"
-        ssh-add private_key.pem
+        expect <<EOF
+        spawn ssh-add private_key.pem
+        expect "Enter passphrase for private_key.pem:"
+        send "${SSH_KEY_PASSPHRASE}\r"
+        expect eof
+        EOF
         scp -o StrictHostKeyChecking=no docker-compose-backend.yml $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/docker-compose.yml
     - name: Run docker-compose on remote server
       env:

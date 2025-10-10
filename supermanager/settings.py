@@ -207,17 +207,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, media_root_path)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email configuration
-EMAIL_ENABLED = bool(os.environ.get('EMAIL_ENABLED')) if environment == 'production' else config('EMAIL_ENABLED', default=False, cast=bool)
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND') if environment == 'production' else config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend', cast=str)
-EMAIL_HOST = os.environ.get('EMAIL_HOST') if environment == 'production' else config('EMAIL_HOST', default='localhost', cast=str)
-EMAIL_PORT = int(os.environ.get('EMAIL_PORT')) if environment == 'production' else config('EMAIL_PORT', default=1025, cast=int)
-EMAIL_USER = os.environ.get('EMAIL_USER') if environment == 'production' else config('EMAIL_USER', default='', cast=str)
-EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD') if environment == 'production' else  config('EMAIL_PASSWORD', default='', cast=str)
-EMAIL_USE_TLS = bool(os.environ.get('EMAIL_USE_TLS')) if environment == 'production' else config('EMAIL_USE_TLS', default=False, cast=bool)
-EMAIL_USE_SSL = bool(os.environ.get('EMAIL_USE_SSL')) if environment == 'production' else config('EMAIL_USE_SSL', default=False, cast=bool)
+MAIL_ENABLED = bool(os.environ.get('MAIL_ENABLED')) if environment == 'production' else config('MAIL_ENABLED', default=False, cast=bool)
+MAIL_BACKEND = os.environ.get('MAIL_BACKEND') if environment == 'production' else config('MAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend', cast=str)
+MAIL_HOST = os.environ.get('MAIL_HOST') if environment == 'production' else config('MAIL_HOST', default='localhost', cast=str)
+MAIL_PORT = int(os.environ.get('MAIL_PORT')) if environment == 'production' else config('MAIL_PORT', default=1025, cast=int)
+MAIL_USER = os.environ.get('MAIL_USER') if environment == 'production' else config('MAIL_USER', default='', cast=str)
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') if environment == 'production' else  config('MAIL_PASSWORD', default='', cast=str)
+MAIL_USE_TLS = bool(os.environ.get('MAIL_USE_TLS')) if environment == 'production' else config('MAIL_USE_TLS', default=False, cast=bool)
+MAIL_USE_SSL = bool(os.environ.get('MAIL_USE_SSL')) if environment == 'production' else config('MAIL_USE_SSL', default=False, cast=bool)
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL') if environment == 'production' else config('DEFAULT_FROM_EMAIL', default='webmaster@localhost', cast=str)
 
 # Email settings for password reset
-EMAIL_PWRESET_SUBJECT = os.environ.get('EMAIL_PWRESET_SUBJECT') if environment == 'production' else config('EMAIL_PWRESET_SUBJECT', default='[SuperManager] Password Reset', cast=str)
-EMAIL_PWRESET_MESSAGE = os.environ.get('EMAIL_PWRESET_MESSAGE') if environment == 'production' else config('EMAIL_PWRESET_MESSAGE', default="Use this link to reset your password: {reset_url}", cast=str)
-EMAIL_PWRESET_URL = os.environ.get('EMAIL_PWRESET_URL') if environment == 'production' else config('EMAIL_PWRESET_URL', default="{FRONTEND_URL}/auth/reset-password/{uid}/{token}", cast=str)
+MAIL_PWRESET_SUBJECT = os.environ.get('MAIL_PWRESET_SUBJECT') if environment == 'production' else config('MAIL_PWRESET_SUBJECT', default='[SuperManager] Password Reset', cast=str)
+MAIL_PWRESET_MESSAGE = os.environ.get('MAIL_PWRESET_MESSAGE') if environment == 'production' else config('MAIL_PWRESET_MESSAGE', default="Use this link to reset your password: {reset_url}", cast=str)
+MAIL_PWRESET_URL = os.environ.get('MAIL_PWRESET_URL') if environment == 'production' else config('MAIL_PWRESET_URL', default="{FRONTEND_URL}/auth/reset-password/{uid}/{token}", cast=str)

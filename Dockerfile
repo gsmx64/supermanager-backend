@@ -1,4 +1,4 @@
-FROM python:3.14.0-slim AS build-phase
+FROM python:3.14.0-slim-bookworm AS build-phase
 
 WORKDIR /app-build
 
@@ -14,9 +14,9 @@ COPY requirements.txt ./
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app-build/wheels -r requirements.txt
 
 
-FROM python:3.14.0-slim
+FROM python:3.14.0-slim-bookworm
 
-RUN mkdir -p /home/app && addgroup --system app && adduser --system --group app && mkdir /home/app/web
+RUN mkdir -p /home/app && addgroup --system app && adduser --system --ingroup app app && mkdir /home/app/web
 
 WORKDIR /home/app/web
 
@@ -25,9 +25,10 @@ ENV ENVIRONMENT=production
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-#RUN apt-get update && apt-get install -y --no-install-recommends netcat
 COPY --from=build-phase /app-build/wheels /wheels
 COPY --from=build-phase /app-build/requirements.txt .
+RUN chown -R app:app /wheels
+RUN apt-get update && apt-get install -y --no-install-recommends netcat
 RUN pip install --upgrade pip && pip install --no-cache /wheels/*
 
 COPY . /home/app/web
